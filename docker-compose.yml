@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.2.0
+    platform: linux/amd64
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: somerootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    networks:
+      - mynetwork
+
+  adminer:
+    depends_on:
+      - db
+    image: adminer:4.8.1
+    platform: linux/amd64
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    networks:
+      - mynetwork
+
+volumes:
+  db_data: {}
+
+networks:
+  mynetwork:
